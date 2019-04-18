@@ -101,6 +101,12 @@ function createLoadableComponent(loadFn, options) {
     options
   );
 
+  console.log({ssr: !!opts.ssr});
+
+  if (typeof opts.ssr === "function") {
+    return opts.ssr();
+  }
+
   let res = null;
 
   function init() {
@@ -111,10 +117,6 @@ function createLoadableComponent(loadFn, options) {
   }
 
   ALL_INITIALIZERS.push(init);
-
-  if (typeof opts.ssr === "function") {
-    return opts.ssr();
-  }
 
   return class LoadableComponent extends React.Component {
     constructor(props) {
