@@ -101,10 +101,9 @@ function createLoadableComponent(loadFn, options) {
     options
   );
 
-  console.log({ssr: !!opts.ssr});
-
   if (typeof opts.ssr === "function") {
-    return opts.ssr();
+    let mod = opts.ssr();
+    if (mod) return mod;
   }
 
   let res = null;
