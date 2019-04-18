@@ -5,19 +5,6 @@ const PropTypes = require("prop-types");
 const ALL_INITIALIZERS = [];
 const READY_INITIALIZERS = [];
 
-function isWebpackReady(getModuleIds) {
-  if (typeof __webpack_modules__ !== "object") {
-    return false;
-  }
-
-  return getModuleIds().every(moduleId => {
-    return (
-      typeof moduleId !== "undefined" &&
-      typeof __webpack_modules__[moduleId] !== "undefined"
-    );
-  });
-}
-
 function load(loader) {
   let promise = loader();
 
@@ -109,7 +96,8 @@ function createLoadableComponent(loadFn, options) {
       delay: 200,
       timeout: null,
       render: render,
-      webpack: null,
+      
+      : null,
       modules: null
     },
     options
@@ -126,12 +114,8 @@ function createLoadableComponent(loadFn, options) {
 
   ALL_INITIALIZERS.push(init);
 
-  if (typeof opts.webpack === "function") {
-    READY_INITIALIZERS.push(() => {
-      if (isWebpackReady(opts.webpack)) {
-        return init();
-      }
-    });
+  if (typeof opts.ssr === "function") {
+    return opts.ssr();
   }
 
   return class LoadableComponent extends React.Component {
