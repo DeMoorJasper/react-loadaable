@@ -96,8 +96,6 @@ function createLoadableComponent(loadFn, options) {
       delay: 200,
       timeout: null,
       render: render,
-      
-      : null,
       modules: null
     },
     options
